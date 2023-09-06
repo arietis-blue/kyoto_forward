@@ -1,47 +1,58 @@
-import React, { useState } from 'react';
-import './App.css';
-import axios from 'axios';
+import React from 'react';
+import {
+  BrowserRouter as Router,
+  Route,
+  Link,
+  Routes
+} from 'react-router-dom';
+import './index.css';
+
+function Home() {
+  return <h2>ホーム</h2>;
+}
+
+function About() {
+  return <h2>私について</h2>;
+}
+
+function Projects() {
+  return <h2>プロジェクト</h2>;
+}
 
 function App() {
-  const [inputValue, setInputValue] = useState("");
-  const [result, setResult] = useState(null);
-
-  const handleInputChange = (e) => {
-    setInputValue(e.target.value);
-  };
-
-  const handleSubmit = async () => {
-    try {
-      // console.log(parseInt(inputValue));
-      const response = await axios.post('http://127.0.0.1:8000/', { number: inputValue });
-      setResult(response.data.result);
-    } catch (error) {
-      console.error("APIからデータの取得に失敗しました:", error);
-    }
-  };
-
   return (
-    <div className="min-h-screen flex items-center justify-center bg-black">
-      <div className="p-6 bg-green-200 shadow-md rounded-md">
-        <input 
-          type="number"
-          value={inputValue}
-          placeholder="number" 
-          onChange={handleInputChange}
-          className="p-2 border rounded w-full"
-        />
-        <button 
-          onClick={handleSubmit}
-          className="mt-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded w-full"
-        >
-          送信
-        </button>
-        {result && (
-          <p className="mt-4 text-gray-700 font-bold">結果: {result}</p>
-        )}
+    <Router>
+      <div className="bg-black h-screen flex flex-col">
+        <header className="bg-orange-500 text-black font-bold p-5 flex items-center justify-between"> {/* ← flex, items-center, and justify-between added */}
+          <h1 className="text-2xl">Kyoto Forward</h1>
+          <nav>
+            <ul className="flex space-x-4 ">
+              <li>
+                <Link to="/">ホーム</Link>
+              </li>
+              <li>
+                <Link to="/about">私について</Link>
+              </li>
+              <li>
+                <Link to="/projects">プロジェクト</Link>
+              </li>
+            </ul>
+          </nav>
+        </header>
+        <main className="flex-grow p-5 text-white">
+          <Routes>
+            <Route path="/about" element={<About />} />
+            <Route path="/projects" element={<Projects />} />
+            <Route path="/" element={<Home />} />
+          </Routes>
+        </main>
+        <footer className="bg-orange-500 text-black font-bold p-5">
+          <p>© 2023 by Me. All rights reserved.</p>
+        </footer>
       </div>
-    </div>
+    </Router>
   );
 }
+
 
 export default App;
